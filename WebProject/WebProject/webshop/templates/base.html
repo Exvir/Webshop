@@ -1,0 +1,147 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+
+	  <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	  <meta name="description" content="">
+	  <meta name="author" content="">
+
+	  <title>Интернет магазин</title>
+
+	  <!-- Bootstrap core CSS -->
+	  <link href="{% static 'webshop/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+	  <!-- Custom styles for this template -->
+	  <link href="{% static 'webshop/css/shop-homepage.css' %}" rel="stylesheet">
+
+	</head>
+
+	<body>
+		<!-- Header -->
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-2 col-md-4">
+						<img style="width: 151px; height: 120px;" src="{% static 'webshop/emblem.png' %}"/>
+					</div>
+					<div class="col-lg-6 col-md-4">
+						<h1 class="text-left">Tik-Tak Clock</h1>
+						<h5 class="text-left">+79104820616</h5>
+					</div>
+					<div class="col-lg-4 col-md-4">
+						{% include 'loginpartial.html' %}
+					</div>
+				</div>
+			</div>
+			
+		</header>
+	<!-- Navigation -->
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div class="container">
+				<a class="navbar-brand" href="{% url "home" %}">Tik-Tak Clock</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarResponsive">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active dropdown">
+        					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" 
+							   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Каталог</a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+								{% for category in categories %}
+										<a href="{{ category.get_absolute_url }}" class="dropdown-item submenu">{{ category.name }}</a>
+								{% endfor %}
+        					</div>
+      					</li>
+						<li class="nav-item active">
+							<a class="nav-link" href="{% url 'discounts' %}">Акции и скидки
+								<span class="sr-only">(current)</span>
+							</a>
+						</li>
+						<li class="nav-item active">
+							<a class="nav-link" href="{% url 'about' %}">О нас
+								<span class="sr-only">(current)</span>
+							</a>
+						</li>
+						<li class="nav-item active">
+							<a class="nav-link" href="{% url 'payment' %}">Оплата
+								<span class="sr-only">(current)</span>
+							</a>
+						</li>
+						<li class="nav-item active">
+							<a class="nav-link" href="{% url 'delivery' %}">Доставка
+								<span class="sr-only">(current)</span>
+							</a>
+						</li>
+						<!--TODO: Добавить реализацию-->
+						<!--<li class="nav-item active">
+							<a class="nav-link" href="{% url 'contacts' %}">Контакты
+								<span class="sr-only">(current)</span>
+							</a>
+						</li>
+						-->
+						
+					</ul>
+					<ul class="navbar-nav ml-auto navbar-right">
+						<!--
+						<li><a href="{% url "cart" %}">Корзина<span class="badge badge-light" id="cart_count">{{ cart.items.count }}</span></a></li>
+						-->
+						<a class="btn btn-light"  href="{% url "cart" %}">Товаров: {{ cart.items.count }} ({{ cart.total_price }} руб.)</a>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	<main>
+		<div class="container main-container">	
+			{% block content %}{% endblock %}
+		</div>
+	</main>
+	<!-- Footer -->
+	<footer class="py-5 bg-dark">
+		<div class="container">
+			<p class="m-0 text-center text-white">Copyright &copy; Tik-Tak-Clock.ru 2019</p>
+		</div>
+		<!-- /.Footer -->
+	</footer>
+
+	<!-- Bootstrap core JavaScript -->
+	<script src="{% static 'webshop/vendor/jquery/jquery.min.js' %}"></script>
+	<script src="{% static 'webshop/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+	<!-- Для приклеивания navbar при прокручивании страницы -->
+	<script>
+		
+		var navBar = document.querySelector('.navbar');
+		var navBarSourceBottom = navBar.getBoundingClientRect().bottom + window.pageYOffset;
+	
+		window.onscroll = function() {
+		  if (navBar.classList.contains('fixed-top') && window.pageYOffset < navBarSourceBottom) {
+			navBar.classList.remove('fixed-top');
+		  } else if (window.pageYOffset > navBarSourceBottom) {
+			navBar.classList.add('fixed-top');
+		  }
+		};
+	</script>
+	<script>
+		//Приклеиание/отклеиание footer в зависимости от размера окна
+		//Срабатывает при изменении размера экрана и загрузке страницы
+		window.onresize = fixFooter; 
+		window.onload   = fixFooter; 
+
+		function fixFooter() {
+			var fullheight = window.innerWidth;
+			var viewheight = document.documentElement.clientWidth;
+			var footer = document.querySelector('footer');
+			if (viewheight >= fullheight && screen.width > 480) { //на мобилках первый оператор работает не корректно, второе сравнение определяет, что сайт открыт на телефоне
+				footer.classList.add('fixed-bottom');
+			} else if (viewheight < fullheight) {
+				footer.classList.remove('fixed-bottom');
+			}
+		}
+	</script>
+	{% block scripts %}{% endblock %}
+	</body>
+
+</html>

@@ -1,0 +1,46 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+	<h2>{{ brand.name }}</h2>
+	<hr />
+	<div class="row">
+		<div class="col-lg-3 col-md-12">
+			<div class=" list-group text-center title-list">
+				<h4 class="">{{ category.name }}</h4>	
+			</div>
+			<div class="list-group list-of-brand">
+				{% for brand in category.brands.all %}
+					<a class="category-in-list" href="{{ brand.get_absolute_url }}">{{ brand.name }}</a>
+				{% endfor %}
+			</div>
+		</div>
+		{% for product in products_of_brand %}
+			{% include 'cardofproduct.html' %}
+		{% endfor %}
+	</div>	
+</div>
+<script src="{% static 'webshop/vendor/jquery/jquery.min.js' %}"></script>
+<script>
+	$(document).ready(function () {
+		$('.add_to_cart').on('click', function(event) {
+			event.preventDefault()    //отключает действие по умолчанию при нажатии кнопки
+			product_slug = $(this).attr('data-slug')
+	        quantity = $('.cart-item-quantity').val()
+			data = {
+				product_slug: product_slug,
+	            quantity: quantity
+			}
+			$.ajax({
+				type: "GET",
+				url: '{% url "add_to_card" %}',
+				data: data,
+				success: function (data) {
+					$("#cart_count").html(data.cart_total)
+				}
+			})
+		})
+	})
+	
+</script>
+{% endblock content %}

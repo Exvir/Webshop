@@ -1,0 +1,121 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link href="{% static 'webshop/css/productpage.css' %}" rel="stylesheet">
+<div class="container">
+	<div class="row">
+		<div class="col-xl-4">
+		<figure class="text-center">	
+			<img class="image main-image" src="{{ product.main_image.url }}"/>
+		</figure>
+		
+		</div>
+		<div class="col-xl-2">
+			<figure class="text-center">
+				<img class="image additional-image" src="{{ product.first_additional_image.url }}"/>
+				<img class="image additional-image" src="{{ product.second_additional_image.url }}"/>
+				<img class="image additional-image" src="{{ product.third_additional_image.url }}"/>
+			</figure>
+		</div>	
+		<div class="col-xl-6">
+
+			<h3 class="text-center">{{ product.title }}</h3>
+			<hr />
+			<p>{{ product.description }}</p>
+			<p><strong>Цена: {{ product.price }}</strong></p>
+
+				<p class="text-right">
+					Количество:
+					<input type="number" name="quantity" class="cart-item-quantity" value="1" min="1" style="width: 50px;"/>
+					<a href="#" class="add_to_cart" data-slug="{{ product.slug }}">		
+						<button class="btn btn-danger">Добавить в корзину</button>
+					</a>
+				</p>
+
+		</div>
+	</div>
+</div>
+<script src="{% static 'webshop/vendor/jquery/jquery.min.js' %}"></script>
+<script>
+	$(document).ready(function () {
+		$('.add_to_cart').on('click', function(event) {
+			event.preventDefault()    //отключает действие по умолчанию при нажатии кнопки
+			product_slug = $(this).attr('data-slug')
+	        quantity = $('.cart-item-quantity').val()
+			data = {
+				product_slug: product_slug,
+	            quantity: quantity
+			}
+			$.ajax({
+				type: "GET",
+				url: '{% url "add_to_card" %}',
+				data: data,
+				success: function (data) {
+					$("#cart_count").html(data.cart_total)
+				}
+			})
+		})
+	})
+	
+</script>
+<script>
+	var main_image = document.querySelector('.main-image');
+	main_image.addEventListener('click', function () {
+		console.log('Клик')
+	});
+</script>
+<script>
+	$(document).ready(function() { // Ждём загрузки страницы
+	
+		$(".image").click(function(){	// Событие клика на маленькое изображение
+	  		var img = $(this);	// Получаем изображение, на которое кликнули
+			var src = img.attr('src'); // Достаем из этого изображения путь до картинки
+			$("body").append("<div class='popup'>"+ //Добавляем в тело документа разметку всплывающего окна
+							 "<div class='popup_bg'></div>"+ // Блок, который будет служить фоном затемненным
+							 "<img src='"+src+"' class='popup_img' />"+ // Само увеличенное фото
+							 "</div>");
+			$(".popup").fadeIn(200); // Медленно выводим изображение
+			$(".popup_bg").click(function(){	// Событие клика на затемненный фон	   
+				$(".popup").fadeOut(200);	// Медленно убираем всплывающее окн	
+		  setTimeout(function() {	// Выставляем таймер
+				  $(".popup").remove(); // Удаляем разметку всплывающего окна
+				}, 200);
+			});
+		});
+	});
+</script>
+{% endblock content %}
+
+
+	<!-- 
+	<div class="col-sm-6">
+		
+		<div class="flex-container">
+			<img class="image main-image" src="{{ product.main_image.url }}"/>
+			<img class="image additional-image" src="{{ product.first_additional_image.url }}"/>
+			<img class="image additional-image" src="{{ product.second_additional_image.url }}"/>
+			<img class="image additional-image" src="{{ product.third_additional_image.url }}"/>
+		</div>
+	</div>
+		
+	<div class="col-sm-6">
+
+		<h3 class="text-center">{{ product.title }}</h3>
+		<hr />
+		<p>{{ product.description }}</p>
+		<p><strong>Цена: {{ product.price }}</strong></p>
+		{% if request.user.is_authenticated %}
+		<p class="text-right">
+			Количество:
+			<input type="number" name="quantity" class="cart-item-quantity" value="1" min="1" style="width: 50px;"/>
+			<a href="#" class="add_to_cart" data-slug="{{ product.slug }}">		
+				<button class="btn btn-danger">Добавить в корзину</button>
+			</a>
+		</p>
+		{% else %}
+		<small class="text-center">Заказывать товар могут только авторизированные пользователи. 
+		Пожалуйста <a href="{% url "login" %}">войдите</a> или <a href="{% url "registration_register" %}">зарегистрируйтесь.</a></small>					
+		{% endif %}
+		
+</div>
+		-->

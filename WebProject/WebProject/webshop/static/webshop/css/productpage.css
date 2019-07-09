@@ -1,0 +1,54 @@
+.image {
+    margin: 10px 8px;
+    cursor: pointer;
+}
+
+.additional-image {
+    width: 100px;
+    height: 77px;
+}
+
+.main-image {
+    width: 340px;
+    height: 272px;
+}
+
+/* —тили дл€ увеличивающегос€ изображени€ */
+
+.popup {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: none;
+    text-align: center;
+}
+
+.popup_bg {
+    background: rgba(0,0,0,0.3);
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: auto;
+    height: auto;
+}
+
+
+.popup_img {
+    position: fixed;
+    z-index: 2;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    max-height: 90%;
+}
+
+.popup_img {
+    pointer-events: none;
+    height: 400px;
+    width: 550px;
+}

@@ -1,0 +1,133 @@
+﻿/*!
+ * Start Bootstrap - Shop Homepage (https://startbootstrap.com/template-overviews/shop-homepage)
+ * Copyright 2013-2019 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-shop-homepage/blob/master/LICENSE)
+ */
+.main-container {
+    margin-top: 10px;
+}
+
+.object-down-menu {
+    background-color: gray;
+    border-top: 5px solid black;
+    border-radius: 0 0 20px 0;    
+}
+
+.item{
+    padding: 10px 0px;
+    margin: 0px;
+}
+
+.title-list {
+    background-color: gray;
+    border-radius: 0 0 20px 0;
+    padding: 10px 0;
+}
+
+.list-of-category {
+    background-color: lightgrey;
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+.category-in-list {
+    padding: 10px 0;    
+}
+
+.list-of-brand {
+    background-color: lightgrey;
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+.brand-in-list {
+    padding-top: 5px;
+}
+
+/*Стили для header*/
+
+.flex {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    
+}
+
+    .flex a {
+        color: #fff;
+        margin: 0px 5px 10px 5px;
+        background-color: #0D1340;
+    }
+    .flex .login {
+        flex-basis: 50px;
+        flex-grow: 1;
+    }
+
+    .flex .registrate {
+        flex-basis: 100px;
+        flex-grow: 3;
+    }
+
+ a {
+    color: #0D1340;
+}
+
+ /*Стили для статических страниц*/
+
+.attention {
+    font-weight: bold;
+    color: darkred;
+}
+
+headline {
+    margin: 30px 0 30px 0
+}
+
+string {
+    margin: 10px 0 10px 0
+}
+
+.payment li {
+    margin: 10px 0 10px 0
+}
+
+.payment ul li {
+    margin-left: 30px;
+}
+
+.footer-to-bottom {
+    min-height: calc(100vh - 80px);
+}
+
+/*Шрифты*/
+h1 {
+    font-family: fantasy;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 40px;
+}
+
+h3 {
+    font-family: fantasy;
+    font-weight: 100;
+    font-style: normal;
+    font-size: 28px;
+}
+
+h5 {
+    font-family: fantasy;
+    font-weight: 100;
+    font-style: normal;
+    font-size: 20px;
+}
+
+a {
+    font-family: fantasy;
+    font-weight: 100;
+    font-style: normal;
+    font-size: 20px;
+}
+
+.list-group a {
+    color: #353535;
+}

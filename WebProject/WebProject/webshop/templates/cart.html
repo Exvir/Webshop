@@ -1,0 +1,97 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h3 class="text-center">Ваша корзина</h3>
+<br />
+<!--Если корзина не пустая-->
+{% if cart.items.count > 0 %}
+<div class="my-cart">
+    <table class="table">
+        <tr>
+            <td class="text-center">Товар</td>
+            <td class="text-center">Кол-во</td>
+            <td class="text-center">Цена</td>
+            <td class="text-center"></td>
+        </tr>
+        <!-- items in cart-->
+        {% for item in cart.items.all %}
+        <tr class="cart-item-{{ item.product.id }}">
+            <td class="text-center">{{ item.product.title }}</td>
+            <td class="text-center">
+                <form action="" method="GET">
+                    <input type="number" name="quantity" class="cart-item-quantity" data-id="{{ item.id }}" value="{{ item.quantity }}" min="1" style="width: 50px;" />
+                </form>
+            </td>
+            <td class="text-center" id="cart-item-total-{{ item.id }}">{{ item.total_price }} руб.</td>
+            <td><a href="#" class="remove_from_cart" data-slug="{{ item.product.slug }}" data-id="{{ item.product.id }}"><button class="btn btn-default">Удалить из корзины</button></a></td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td class="text-center"></td>
+            <td class="text-center">Итого</td>
+            <td class="text-center" id="cart-total-price">{{ cart.total_price }} руб.</td>
+            <td class="text-center"></td>
+        </tr>
+    </table>
+    <br />
+    <a href="{% url 'checkout' %}"><button class="btn vtn-info pull-right">Предварительный заказ</button></a>
+</div>
+<h3 class="cart-empty"></h3>
+{% else %}
+<h3 class="text-center">Ваша корзина пуста</h3>
+{% endif %}
+<script src="{% static 'webshop/vendor/jquery/jquery.min.js' %}"></script>
+<!-- remove from cart-->
+<script>
+	$(document).ready(function () {
+		$('.remove_from_cart').on('click', function(event) {
+			event.preventDefault()
+			product_slug = $(this).attr('data-slug')
+			item_product_id = $(this).attr('data-id')
+			data = {
+				product_slug: product_slug
+			}
+			$.ajax({
+				type: "GET",
+				url: '{% url "remove_from_cart" %}',
+				data: data,
+				success: function (data) {
+					$("#cart_count").html(data.cart_total)
+					$('.cart-item-'+item_product_id).remove()
+					$('#cart-total-price').html(parseFloat(data.cart_total_price).toFixed(2) + 'руб.')
+					if(parseInt(data.cart_total) == 0){//В случае пустой корзины
+						$('.my-cart').css('display', 'none')
+						$('.cart-empty').html('<h3 class="text-center">Ваша корзина пуста</h3>')
+					}
+				}
+			})
+		})
+	})
+
+</script>
+<!--count price items in cart-->
+<script>
+	$(document).ready(function () {
+		$('.cart-item-quantity').on('click', function () {
+			quantity = $(this).val()
+			item_id = $(this).attr('data-id')
+			data = {//данные отправляемые на сервер ajax запросом
+				new_quantity: quantity,
+				item_id: item_id
+
+			}
+			$.ajax({  //делает запрос на сервер, без перезагрузки страницы,
+				type: "GET",
+				url: '{% url "change_item_quantity_and_recount_total_price" %}',
+				data: data,
+				success: function (data) {//в случае успеха выполняет функцию с параметрами data получеными из представления
+					$('#cart-item-total-'+item_id).html(parseFloat(data.item_total).toFixed(2) + 'руб.')
+					$('#cart-total-price').html(parseFloat(data.cart_total_price).toFixed(2) + 'руб.')
+				}
+			})
+		})
+	})
+</script>
+
+{% endblock content %}

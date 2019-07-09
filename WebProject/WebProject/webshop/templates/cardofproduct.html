@@ -1,0 +1,36 @@
+﻿<!--product получаем из внешнего цикла, в который карта продукта включается-->
+<div class="col-lg-3 col-md-6 item">
+	<div class="card-body">
+		<figure style="text-align: center;">
+			<img class ="image-in-cart" src="{{ product.main_image.url }}" style="width:250px; height: 182px;"/>
+		
+			<hr />
+			<h4 class="text-center">
+				<a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
+			</h4>
+			<p class="text-center"><strong>Цена: {{ product.price }}</strong></p>
+			<div class="card-footer">
+				
+			
+				<div class="text-center">
+				Количество:
+				<input type="number" name="quantity" class="cart-item-quantity" value="1" min="1" style="width: 50px;"/>
+				<hr />
+				<a href="#" class="add_to_cart" data-slug="{{ product.slug }}">		
+					<button class="btn btn-danger">Добавить в корзину</button>
+				</a>
+				</div>
+			
+				<!--
+			<small class="text-center">Заказывать товар могут только авторизированные пользователи. 
+			Пожалуйста <a href="{% url "login" %}">войдите</a> или <a href="{% url "registration_register" %}">зарегистрируйтесь.</a></small>					
+			
+					-->
+			</div>
+		</figure>
+	</div>
+</div>
+
+
+
+	
