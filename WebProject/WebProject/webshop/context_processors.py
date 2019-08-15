@@ -1,11 +1,15 @@
+from datetime import datetime
+
 from webshop.models import Category
 from webshop.functions import get_or_create_cart
 
 #создать функции для работы с ключами сессии при работе с корзиной
 def menu(request):
     categories = Category.objects.all()
+
     context = {
         'categories': categories,
+		'year': datetime.now().year,
         }
     return context
 

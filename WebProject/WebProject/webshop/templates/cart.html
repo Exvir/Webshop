@@ -35,7 +35,7 @@
         </tr>
     </table>
     <br />
-    <a href="{% url 'checkout' %}"><button class="btn vtn-info pull-right">Предварительный заказ</button></a>
+    <a href="{% url 'checkout' %}"><button class="btn btn-success pull-right">Предварительный заказ</button></a>
 </div>
 <h3 class="cart-empty"></h3>
 {% else %}
@@ -52,17 +52,23 @@
 			data = {
 				product_slug: product_slug
 			}
+			console.log(data)
 			$.ajax({
 				type: "GET",
 				url: '{% url "remove_from_cart" %}',
 				data: data,
 				success: function (data) {
+					$("#quantity_items_in_cart").html(data.cart_total)
+					$("#total_price_cart").html(data.cart_total_price)
 					$("#cart_count").html(data.cart_total)
 					$('.cart-item-'+item_product_id).remove()
 					$('#cart-total-price').html(parseFloat(data.cart_total_price).toFixed(2) + 'руб.')
 					if(parseInt(data.cart_total) == 0){//В случае пустой корзины
 						$('.my-cart').css('display', 'none')
 						$('.cart-empty').html('<h3 class="text-center">Ваша корзина пуста</h3>')
+						$("#quantity_items_in_cart").html(data.cart_total)
+						$("#total_price_cart").html(data.cart_total_price)
+
 					}
 				}
 			})
@@ -88,6 +94,8 @@
 				success: function (data) {//в случае успеха выполняет функцию с параметрами data получеными из представления
 					$('#cart-item-total-'+item_id).html(parseFloat(data.item_total).toFixed(2) + 'руб.')
 					$('#cart-total-price').html(parseFloat(data.cart_total_price).toFixed(2) + 'руб.')
+					$("#total_price_cart").html(data.cart_total_price)
+
 				}
 			})
 		})

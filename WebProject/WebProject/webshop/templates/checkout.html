@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
@@ -27,5 +27,5 @@
         <td class="text-center"></td>
     </tr>
 </table>
-<a href="{% url 'order_create' %}" class="pull-right"><button class="btn btn-success">Оформить заказ</button></a>
+<a href="{% url 'order' %}" class="pull-right"><button class="btn btn-success">Оформить заказ</button></a>
 {% endblock content %}

@@ -76,20 +76,14 @@
 								<span class="sr-only">(current)</span>
 							</a>
 						</li>
-						<!--TODO: Добавить реализацию-->
-						<!--<li class="nav-item active">
-							<a class="nav-link" href="{% url 'contacts' %}">Контакты
+						<li class="nav-item active">
+							<a class="nav-link" href="{% url 'contact_us' %}">Контакты
 								<span class="sr-only">(current)</span>
 							</a>
 						</li>
-						-->
-						
 					</ul>
 					<ul class="navbar-nav ml-auto navbar-right">
-						<!--
-						<li><a href="{% url "cart" %}">Корзина<span class="badge badge-light" id="cart_count">{{ cart.items.count }}</span></a></li>
-						-->
-						<a class="btn btn-light"  href="{% url "cart" %}">Товаров: {{ cart.items.count }} ({{ cart.total_price }} руб.)</a>
+						<a class="btn btn-light"  href="{% url "cart" %}">Товаров: <span id="quantity_items_in_cart">{{ cart.items.count }}</span> (<span id="total_price_cart">{{ cart.total_price }}</span> руб.)</a>
 					</ul>
 				</div>
 			</div>
@@ -102,7 +96,7 @@
 	<!-- Footer -->
 	<footer class="py-5 bg-dark">
 		<div class="container">
-			<p class="m-0 text-center text-white">Copyright &copy; Tik-Tak-Clock.ru 2019</p>
+			<p class="m-0 text-center text-white">Copyright &copy; Tik-Tak-Clock.ru {{year}}</p>
 		</div>
 		<!-- /.Footer -->
 	</footer>
@@ -125,7 +119,7 @@
 		};
 	</script>
 	<script>
-		//Приклеиание/отклеиание footer в зависимости от размера окна
+		//Приклеиание/отклевание footer в зависимости от размера окна
 		//Срабатывает при изменении размера экрана и загрузке страницы
 		window.onresize = fixFooter; 
 		window.onload   = fixFooter; 
@@ -140,6 +134,30 @@
 				footer.classList.remove('fixed-bottom');
 			}
 		}
+	</script>
+	<!--recount full price and quantity items of cart in navbar-->
+	<script>
+		   $(document).ready(function () {
+				$('.add_to_cart').on('click', function(event) {
+				event.preventDefault()    //отключает действие по умолчанию при нажатии кнопки
+				product_slug = $(this).attr('data-slug')
+				quantity = $('.cart-item-quantity').val()
+				data = {
+					product_slug: product_slug,
+					quantity: quantity
+				}
+					$.ajax({
+					type: "GET",
+					url: '{% url "add_to_card" %}',
+					data: data,
+					success: function (data) {
+						$("#quantity_items_in_cart").html(data.cart_total)
+						$("#total_price_cart").html(data.cart_total_price)
+					}
+				})
+			})
+		})
+	
 	</script>
 	{% block scripts %}{% endblock %}
 	</body>

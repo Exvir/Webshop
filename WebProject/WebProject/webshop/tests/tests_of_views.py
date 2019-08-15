@@ -5,7 +5,7 @@ import webshop.views
 from webshop.models import Category, Brand
 
 class HomePageTest(TestCase):
-
+	#проверка возвращаемой функции по заданному url
 	def test_url_resolves(self):
 		#преобразование url в представление
 		found = resolve('/')
@@ -26,14 +26,14 @@ class HomePageTest(TestCase):
 		self.assertEqual(response.context.get('categories').count(), Category.objects.all().count())
 		
 class ProductPageTest(TestCase):
-
+	#проверка возвращаемой функции по заданному url
 	def test_url_resolves(self):
 		#преобразование url в представление
 		found = resolve('/product/test-slug/')
 		self.assertEqual(found.func, webshop.views.product_view)
 
 class СategoryPageTest(TestCase):
-
+	#проверка возвращаемой функции по заданному url
 	def test_url_resolves(self):
 		#преобразование url в представление
 		found = resolve('/category/test-slug/')
@@ -48,7 +48,7 @@ class СategoryPageTest(TestCase):
 		self.assertEqual(response.context.get('category'), Category.objects.get(slug='test-slug'))
 
 class BrandPageTest(TestCase):
-
+	#проверка возвращаемой функции по заданному url
 	def test_url_resolves(self):
 		#преобразование url в представление
 		found = resolve('/brand/test-slug/')
@@ -62,9 +62,9 @@ class BrandPageTest(TestCase):
 		self.assertIsNotNone(response.context)
 		self.assertEqual(response.context.get('brand'), Brand.objects.get(slug='test-slug'))
 
-#написать тесты для вьшек корзины
-class CartPageTest(TestCase):
 
+class CartPageTest(TestCase):
+	#проверка возвращаемой функции по заданному url
 	def test_cart_page_url_resolves(self):
 		#преобразование url в представление
 		found = resolve('/cart/')

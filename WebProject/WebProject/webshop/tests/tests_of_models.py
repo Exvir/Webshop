@@ -2,9 +2,7 @@ from django.test import TestCase
 
 from webshop.models import Brand, Category, Product, Cart, CartItem, TypeOfMechanism
 
-#ПЕРЕПИСАТЬ ВСЕ ТЕСТЫ!!!
 
-#Тесты моделей
 class BrandModelTest(TestCase):
 	
 	def test_saving_brands(self):
@@ -36,6 +34,21 @@ class CategoryModelTest(TestCase):
 		self.assertEqual(first_saved_category.slug, 'the-first-test-category')
 		self.assertEqual(second_saved_category.name, 'The second test category')
 		self.assertEqual(second_saved_category.slug, 'the-second-test-category')
+
+class TypeOfMechanismModelTest(TestCase):
+	
+	def test_saving_type_of_mechanism(self):
+
+		TypeOfMechanism.objects.create(name='The first test type')
+		TypeOfMechanism.objects.create(name='The second test type')
+
+		saved_types = TypeOfMechanism.objects.all()
+		self.assertEqual(saved_types.count(), 2)
+
+		first_saved_type = saved_types[0]
+		second_saved_type = saved_types[1]
+		self.assertEqual(first_saved_type.name, 'The first test type')
+		self.assertEqual(second_saved_type.name, 'The second test type')
 
 class ProductModelTest(TestCase):
 
@@ -74,10 +87,9 @@ class CartItemModelTest(TestCase):
 								)
 		return CartItem.objects.create(product=test_product)
 	
-	@create_test_objects
 	def test_saving_cart_item(self):
 		
-	#	saved_cart_items = self.create_test_object()
+		saved_cart_items = self.create_test_object()
 		self.assertEqual(CartItem.objects.count(), 1)
 
 	def test_change_quantity_in_cart_item(self):

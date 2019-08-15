@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block content %}
 <div class="container">
@@ -6,9 +6,7 @@
 	<hr />
 	<div class="row">
 		<div class="col-lg-3 col-md-12">
-			<div class=" list-group text-center title-list">
-				<h4 class="">{{ category.name }}</h4>	
-			</div>
+
 			<div class="list-group list-of-brand">
 				{% for brand in category.brands.all %}
 					<a class="category-in-list" href="{{ brand.get_absolute_url }}">{{ brand.name }}</a>

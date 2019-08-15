@@ -2,37 +2,107 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
-
-<form action="{% url 'make_order' %}" method="POST">
+<link href="{% static 'webshop/css/form-styles.css' %}" rel="stylesheet">
+<h3 class="text-center">Остался последний шаг!</h3>
+<h5 class="text-center">Заполните форму ниже для того, чтобы оформить заказ</h5>
+<form action="{% url 'order' %}" method="POST">
     {% csrf_token %}
+    <input type="hidden" name="csrfmiddlewaretoken" value="RnYyDNzFS0VCiPGpBDlIFIIC9G2PLIJtRGkSCmD1gdubSkxDzcjNSr21jo6l55Vu">
     <div class="row">
         <div class="col-sm-4">
-            {{ form.name|as_crispy_field }}
-        </div>
-        <div class="col-sm-4">
-            {{ form.last_name|as_crispy_field }}
-        </div>
-        <div class="col-sm-4">
-            {{ form.patronymic|as_crispy_field }}
-        </div>
+			<label for="id_first_name" class="control-label requiredField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+				Имя </font></font><span class="asteriskField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">*</font></font></span>
+			</label>                              
+			<div class="controls">                
+				<input type="text" name="first_name" maxlength="200" class="textinput textInput" required="" id="id_first_name">                         
+			</div>        
+		</div>
+        <div class="col-sm-4">                 
+			<label for="id_last_name" class="control-label requiredField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+				Фамилия </font></font><span class="asteriskField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">*</font></font></span>
+			</label>
+			<div class="controls">               
+                <input type="text" name="last_name" maxlength="200" class="textinput textInput" required="" id="id_last_name">    
+			</div>
+		</div>
+        <div class="col-sm-4">       
+			<label for="id_patronymic" class="control-label requiredField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+				Отчество </font></font><span class="asteriskField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">*</font></font></span>
+			</label>      
+			<div class="controls">                
+				<input type="text" name="patronymic" maxlength="200" class="textinput textInput" required="" id="id_patronymic">       
+			</div>        
+		</div>
     </div>
 	<div class="row">
         <div class="col-sm-4">
-            {{ form.postcode|as_crispy_field }}
-        </div>
+			<label for="id_postcode" class="control-label requiredField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+				Почтовый индекс </font></font><span class="asteriskField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">*</font></font></span>
+			</label>
+			<div class="controls">
+                <input type="number" name="postcode" class="numberinput" required="" id="id_postcode">
+			</div>
+		</div>		
         <div class="col-sm-4">
-            {{ form.city|as_crispy_field }}
-        </div>
+			<label for="id_city" class="control-label requiredField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+				Город </font></font><span class="asteriskField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">*</font></font></span>
+			</label>
+			<div class="controls">
+				<input type="text" name="city" maxlength="100" class="textinput textInput" required="" id="id_city">
+			</div>
+		</div>
         <div class="col-sm-4">
-            {{ form.address|as_crispy_field }}
-        </div>
-    </div>
-	{{ form.email|as_crispy_field }}
-    {{ form.phone|as_crispy_field }}
-    {{ form.comments|as_crispy_field }}
-    <input type="submit" class="btn btn-success" value="Оформить заказ" />
-
+			<label for="id_address" class="control-label requiredField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+				Адрес </font></font><span class="asteriskField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">*</font></font></span>
+			</label>
+			<div class="controls">                
+				<input type="text" name="address" maxlength="255" class="textinput textInput" required="" id="id_address">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<label for="id_email" class="control-label requiredField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+				Email </font></font><span class="asteriskField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">*</font></font></span>
+			</label>
+			<div class="controls">                
+				<input type="email" name="email" maxlength="254" class="emailinput" required="" id="id_email">           
+			</div>
+		</div>		
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<label for="id_phone" class="control-label requiredField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+				Телефон </font></font><span class="asteriskField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">*</font></font></span>
+			</label>
+			<div class="controls">
+				<input type="text" name="phone" maxlength="20" class="textinput textInput" required="" id="id_phone">			
+			</div>
+		</div>		
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<label for="id_phone" class="control-label requiredField"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+				Комментарии к заказу </font></font>
+			</label>
+			<div class="controls">
+				<textarea name="comments"></textarea>
+			</div>			
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<p id="error_help_id" class="help-block"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">* Поля обязательные для заполнения.</font></font></strong></p>
+		</div>		
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><input type="submit" class="btn btn-success" value="Оформить заказ"></font></font>
+		</div>		
+	</div>
+	
 </form>
+	
 <script src="{% static "v4/jquery/jquery.min.js" %}"></script>
 <script>
     $(document).ready(function () {

@@ -10,6 +10,7 @@ from django.conf.urls import url
 #Импорт библиотек для медиа файлов
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 # Uncomment the next lines to enable the admin:
 from django.conf.urls import include
@@ -22,12 +23,10 @@ from registration.forms import RegistrationFormTermsOfService
 import webshop.forms
 import webshop.views
 
-
-
 urlpatterns = [
     # Examples:
-    url(r'^$', webshop.views.home_view, name='home'),
-    url(r'^registration/$', webshop.views.registration_view, name='registration'),
+    
+	url(r'^$', webshop.views.HomeView.as_view(), name='home'),
 	url(r'^accounts/', include('registration.backends.default.urls'), name='accounts'),
     url(r'^login/$',
         django.contrib.auth.views.login,
@@ -41,29 +40,23 @@ urlpatterns = [
             }
         },
         name='login'),
-    url(r'^logout$',
-        django.contrib.auth.views.logout,
-        {
-            'next_page': '/',
-        },
-        name='logout'),
-    url(r'^product/(?P<product_slug>[-\w]+)/$', webshop.views.product_view, name = 'product_detail'),
-    url(r'^category/(?P<category_slug>[-\w]+)/$', webshop.views.category_view, name = 'category_detail'),
-	url(r'^brand/(?P<brand_slug>[-\w]+)/$', webshop.views.brand_view, name = 'brand_detail'),
-    url(r'^cart/$', webshop.views.cart_view, name='cart'),
-    url(r'^add_to_cart/$', webshop.views.add_to_cart_view, name='add_to_card'),
-    url(r'^remove_from_cart/$', webshop.views.remove_from_cart_view, name='remove_from_cart'),
-    url(r'^change_item_quantity_and_recount_total_price/$',
+    url(r'^logout$', django.contrib.auth.views.logout, {'next_page': '/',}, name='logout'),
+	url(r'^product/(?P<product_slug>[-\w]+)/$', webshop.views.ProductView.as_view(), name='product_detail'),
+	url(r'^category/(?P<category_slug>[-\w]+)/$', webshop.views.CategoryView.as_view(), name='category_detail'),
+	url(r'^brand/(?P<brand_slug>[-\w]+)/$', webshop.views.BrandView.as_view(), name='brand_detail'),
+    url(r'^cart/$', TemplateView.as_view(template_name="cart.html"), name='cart'),
+    url(r'^cart/add_to_cart/$', webshop.views.add_to_cart_view, name='add_to_card'),
+    url(r'^cart/remove_from_cart/$', webshop.views.remove_from_cart_view, name='remove_from_cart'),
+    url(r'^cart/change_item_quantity_and_recount_total_price/$',
         webshop.views.change_item_quantity_and_recount_total_price_view,
         name="change_item_quantity_and_recount_total_price"),
-	url(r'^checkout/$', webshop.views.checkout_view, name="checkout"),
-    url(r'^order/$', webshop.views.order_create_view, name='order_create'),
-	url(r'^make_order/$', webshop.views.make_order_view, name='make_order'),
-	url(r'^about/$', webshop.views.return_page, {'template': 'about.html'}, name='about'),
-	url(r'^discounts/$', webshop.views.return_page, {'template': 'discounts.html'}, name='discounts'),
-	url(r'^payment/$', webshop.views.return_page, {'template': 'payment.html'}, name='payment'),
-	url(r'^delivery/$', webshop.views.return_page, {'template': 'delivery.html'}, name='delivery'),
-	url(r'^contacts/$', webshop.views.return_page, {'template': 'contacts.html'}, name='contacts'),
+	url(r'^cart/checkout/$', TemplateView.as_view(template_name="checkout.html"), name="checkout"),
+	url(r'^order$', webshop.views.OrderView.as_view(), name='order'),
+	url(r'^about/$', TemplateView.as_view(template_name="about.html"), name='about'),
+	url(r'^discounts/$', TemplateView.as_view(template_name="discounts.html"), name='discounts'),
+	url(r'^payment/$', TemplateView.as_view(template_name="payment.html"), name='payment'),
+	url(r'^delivery/$', TemplateView.as_view(template_name="delivery.html"), name='delivery'),
+	url(r'^contact_us/$', webshop.views.ContactUsView.as_view(), name='contact_us'),
 
     url(r'^clean/$', webshop.views.clean_view, name='clean'),
 

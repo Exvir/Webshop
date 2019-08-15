@@ -4,12 +4,14 @@
 	</div>
 	<div class="flex">
 		<a href="{% url "login" %}" class="btn login">Войти</a>
-		<a href="{% url 'registration' %}" class="btn btn-dark registrate">Зарегистрироваться</a>
+		<a href="{% url 'registration_register' %}" class="btn btn-dark registrate">Зарегистрироваться</a>
 	</div>
 	
 {% else %}
-	<h5 class="nav-item"><a class="nav-link" href="#">Здравствуйте, {{ request.user }}!</a></h5>
-	<h5 class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Выйти</a></h5>
+	<div class="flex">
+		<h3 class="text-right"><span class="">Здравствуйте, {{ request.user }}!</span></h3>
+		<a href="{% url 'logout' %}" class="btn btn-dark registrate">Выйти</a>
+	</div>
 {% endif %}
 
 

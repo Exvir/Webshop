@@ -3,10 +3,7 @@
 {% block content %}
 <!-- Page Content -->
 <div class="container">
-	<!--TODO: Строка для часы, браслеты, акции и т.д.-->
-	<!--TODO: Переименовать классы стилей-->
 	<div class="row">
-
 		<div class="col-lg-3">
 			<div class="text-center object-down-menu" style=''>
 				<h3 class="item">Выбрать часы</h3>
@@ -31,32 +28,7 @@
 			{% include 'cardofproduct.html' %}
 		{% endfor %}
 	</div>
-
-
 </div>
   <!-- /.container -->
-<script src="{% static 'webshop/vendor/jquery/jquery.min.js' %}"></script>
-<script>
-	   $(document).ready(function () {
-		$('.add_to_cart').on('click', function(event) {
-			event.preventDefault()    //отключает действие по умолчанию при нажатии кнопки
-			product_slug = $(this).attr('data-slug')
-	        quantity = $('.cart-item-quantity').val()
-			data = {
-				product_slug: product_slug,
-	            quantity: quantity
-			}
-			   $.ajax({
-				type: "GET",
-				url: '{% url "add_to_card" %}',
-				data: data,
-				success: function (data) {
-					$("#cart_count").html(data.cart_total)
-				}
-			})
-		})
-	})
-	
-</script>
 
 {% endblock %}

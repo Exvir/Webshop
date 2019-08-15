@@ -3,6 +3,8 @@
  * Copyright 2013-2019 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-shop-homepage/blob/master/LICENSE)
  */
+
+
 .main-container {
     margin-top: 10px;
 }
@@ -100,29 +102,30 @@ string {
 }
 
 /*Шрифты*/
+
 h1 {
-    font-family: fantasy;
+    font-family: fantasy, Impact, Arial;
     font-weight: 400;
     font-style: normal;
     font-size: 40px;
 }
 
 h3 {
-    font-family: fantasy;
+    font-family: fantasy, Impact;
     font-weight: 100;
     font-style: normal;
     font-size: 28px;
 }
 
 h5 {
-    font-family: fantasy;
+    font-family: fantasy, Impact;
     font-weight: 100;
     font-style: normal;
     font-size: 20px;
 }
 
 a {
-    font-family: fantasy;
+    font-family: fantasy, Impact;
     font-weight: 100;
     font-style: normal;
     font-size: 20px;

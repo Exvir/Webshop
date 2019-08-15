@@ -87,6 +87,7 @@
   <ItemGroup>
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
+    <Content Include="webshop\static\webshop\css\form-styles.css" />
     <Content Include="webshop\static\webshop\css\productpage.css" />
     <Content Include="webshop\static\webshop\css\shop-homepage.css" />
     <Content Include="webshop\static\webshop\vendor\bootstrap\css\bootstrap.css" />
@@ -114,7 +115,7 @@
     <Content Include="webshop\templates\cart.html" />
     <Content Include="webshop\templates\category.html" />
     <Content Include="webshop\templates\checkout.html" />
-    <Content Include="webshop\templates\contacts.html" />
+    <Content Include="webshop\templates\contact_us.html" />
     <Content Include="webshop\templates\delivery.html" />
     <Content Include="webshop\templates\discounts.html" />
     <Content Include="webshop\templates\index.html" />
@@ -125,6 +126,7 @@
     <Content Include="webshop\templates\product.html" />
     <Content Include="webshop\templates\registration.html" />
     <Content Include="webshop\templates\registration\registration_form.html" />
+    <Content Include="webshop\templates\WebPage1.html" />
     <Content Include="webshop\__pycache__\forms.cpython-36.pyc" />
     <Content Include="webshop\__pycache__\models.cpython-36.pyc" />
     <Content Include="webshop\__pycache__\views.cpython-36.pyc" />

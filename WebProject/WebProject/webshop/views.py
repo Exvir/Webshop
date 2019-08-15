@@ -3,97 +3,127 @@ Definition of views.
 """
 from datetime import datetime
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpRequest, HttpResponseRedirect, JsonResponse
 from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
 from django.template import RequestContext
 from django.contrib.auth import authenticate
 from django.contrib.auth.views import login
-from django.core.mail import send_mail
+from django.views.generic import View, ListView
 
-from webshop.models import Category, Product, CartItem, Cart, Brand
-from webshop.forms import RegistrationForm, OrderForm
+from webshop.models import Category, Product, CartItem, Cart, Brand, Order
+from webshop.forms import OrderForm, ContactUsForm
 from webshop.functions import get_cart, get_or_create_cart
-
-
 
 #Названия переменных переписать, проверяя как они используется в шаблонах
 
-def home_view(request):
-	products = Product.objects.all()
-	brands = Brand.objects.all()
-	context = {
-		'products': products,
-		'brands': brands
-		}
-	return render(request, 'index.html', context)
+class HomeView(ListView):
 
-def registration_view(request):
-	form = RegistrationForm(request.POST or None)
-	if form.is_valid():
+	template_name = 'index.html'
+	context_object_name = 'products'
+	model = Product
 
-		new_user = form.save(commit=False)
-		username = form.cleaned_data['username']
-		password = form.cleaned_data['password']
-		email = form.cleaned_data['email']
-		first_name = form.cleaned_data['first_name']
-		last_name = form.cleaned_data['last_name']
+	def get_context_data(self, **kwargs):
+		context = super(HomeView, self).get_context_data(**kwargs)
+		context['brands'] = Brand.objects.all()
+		return context
 
-		#Перенести в методы формы
-		#Сохранение нового юзера
-		new_user.username = username
-		new_user.set_password(password)
-		new_user.email = email
-		new_user.first_name = first_name
-		new_user.last_name = last_name
-		new_user.save()
-		#переименовать
-		#вынести в отдельную функцию
-		login_user = authenticate(username=username, password=password)
-		if login_user:
-			login(request, login_user)
+class ProductView(ListView):
+
+	template_name = 'product.html'
+	context_object_name = 'product'
+
+	def get_queryset(self):
+		self.product = get_object_or_404(Product, slug=self.kwargs['product_slug'])
+		return self.product
+
+class CategoryView(ListView):
+
+	template_name = 'category.html'
+	context_object_name = 'category'
+
+	def get_queryset(self):
+		self.category = get_object_or_404(Category, slug=self.kwargs['category_slug'])
+		return self.category
+
+	def get_context_data(self, **kwargs):
+		context = super(CategoryView, self).get_context_data(**kwargs)
+		context['brands'] = self.category.brands.all()
+		context['products_of_category'] = Product.objects.filter(category=self.category)
+		return context	
+
+class BrandView(ListView):
+
+	template_name = 'brand.html'
+	context_object_name = 'brand'
+
+	def get_queryset(self):
+		self.brand = get_object_or_404(Brand, slug=self.kwargs['brand_slug'])
+		return self.brand
+
+	def get_context_data(self, **kwargs):
+		context = super(BrandView, self).get_context_data(**kwargs)
+		context['products_of_brand'] = Product.objects.filter(brand=self.brand)
+		return context	
+
+class OrderView(View):
+
+	form_class = OrderForm
+	template_name = 'order.html'
+	
+	def get(self, request, *args, **kwargs):
+		return render(request, self.template_name)
+
+	def post(self, request, *args, **kwargs):
+		form = self.form_class(request.POST)
+		if form.is_valid():
+			new_order = form.save()
+			cart = get_cart(request)
+			new_order.items.add(cart)
+			new_order.save()
+		#дописать отправку письма в отдельном методе
+			values = new_order.get_values_local_fields()	
+			message = 'Данные заказа \n'
+			message += ','.join(map(str, values))
+			message += 'Посмотреть заказ №{} в базе данных можно по ссылке: https://clock.conwert.ru/admin/webshop/order/'.format(new_order.id)
+			send_mail('Поступил Заказ №{}'.format(new_order.id), message,
+					'tiktakclock24@gmail.com', ['tiktakclock24@gmail.com'], fail_silently=False)
+
+			del request.session['cart_id']
+			del request.session['total_quantity_items_in_cart']
 			return HttpResponseRedirect(reverse('home'))
-	#Добавил чтобы получать сообщение об ошибке при тестировании, надо бы переписать
-#	else:
-#		form.clean()
+        else:
+            pass # дописать возврат формы с ошибками, смотри конспект лекций по формам
+		return render(request, self.template_name)
 
-	context = {
-		'form': form
-		}
-	return render(request, 'registration.html', context)
+class ContactUsView(View):
 
-#Для отображения url в шаблоне
-def product_view(request, product_slug):
-	product = Product.objects.get(slug=product_slug)
-	context = {
-		'product': product
-		}
-	return render(request, 'product.html', context)
+	form_class = ContactUsForm
+	template_name = 'contact_us.html'
+	
+	def get(self, request, *args, **kwargs):
+		return render(request, self.template_name)
 
-#Для отображения url в шаблоне
-def category_view(request, category_slug):
-	category = Category.objects.get(slug=category_slug)
-	products_of_category = Product.objects.filter(category=category)
-	#рабоатет неправильно, разобраться
-	#products_of_category = category.product_set.all()
-	context = {
-		'category': category,
-		'products_of_category': products_of_category
-		}
-	return render(request, 'category.html', context)
+	def post(self, request, *args, **kwargs):
+		contact_form = self.form_class(request.POST) # A form bound to the POST data
+		if contact_form.is_valid(): # All validation rules pass
+			subject = "(Обратная связь от клиента) "
+			subject += contact_form.cleaned_data['subject']
+			sender = contact_form.cleaned_data['sender']
+			message = 'Письмо было отправлено от {} \r\n \r\n'.format(sender)
+			message += contact_form.cleaned_data['message']
+			recipient = ['tiktakclock24@gmail.com']
+			try:
+				send_mail(subject, message, sender, recipient, fail_silently=False)
+			except:
+				# TODO: дописать сообщение о том, что отправка провалилась
+				pass
+			return HttpResponseRedirect(reverse('home'))
+	#		return render_to_response(reverse('home'), {'path_back': path_back}, context_instance=RequestContext(request))
 
-def brand_view(request, brand_slug):
-	brand = Brand.objects.get(slug=brand_slug)
-	products_of_brand = brand.product_set.all()
-	context = {
-		'brand': brand,
-		'products_of_brand': products_of_brand
-		}
-	return render(request, 'brand.html', context)
-
-def cart_view(request):
-	return render(request, 'cart.html')
-
+		return HttpResponseRedirect(reverse('home'))
+	#	return render_to_response(reverse('home'), context_instance=RequestContext(request))
 
 #Добавление в корзину
 def add_to_cart_view(request):
@@ -108,7 +138,6 @@ def add_to_cart_view(request):
 		'cart_total_price': cart.total_price
 		})
 
-
 #Удаление из корзины
 def remove_from_cart_view(request):
 	cart = get_cart(request)
@@ -121,7 +150,6 @@ def remove_from_cart_view(request):
 		{"cart_total": cart.items.count(),
 		'cart_total_price': cart.total_price
 		})
-
 
 def change_item_quantity_and_recount_total_price_view(request):
 	cart = get_cart(request)
@@ -137,54 +165,6 @@ def change_item_quantity_and_recount_total_price_view(request):
 		'cart_total_price': cart.total_price
 		})
 
-def checkout_view(request):
-	return render(request, 'checkout.html', {})
-
-def order_create_view(request):
-	form = OrderForm(request.POST or None)
-	context = {
-		'form': form,
-		}
-	return render(request, 'order.html', context)
-
-def make_order_view(request):
-
-	form = OrderForm(request.POST or None)
-	if form.is_valid():
-		cart, created = get_or_create_cart(request)
-		name = form.cleaned_data['name']
-		last_name = form.cleaned_data['last_name']
-		patronymic = form.cleaned_data['patronymic']
-		email = form.cleaned_data['email']
-		phone = form.cleaned_data['phone']
-		city = form.cleaned_data['city']
-		address = form.cleaned_data['address']
-		postcode = form.cleaned_data['postcode']
-		comments = form.cleaned_data['comments']
-		new_order = Order()
-		new_order.user = request.user
-		new_order.save()
-		new_order.items.add(cart)
-		new_order.first_name = name
-		new_order.last_name = last_name
-		new_order.patronymic = patronymic
-		new_order.email = email
-		new_order.phone = phone
-		new_order.city = city
-		new_order.address = address
-		new_order.postcode = postcode
-		new_order.comments = comments
-		new_order.total = cart.total_price
-		new_order.save()
-		del request.session['cart_id']
-		del request.session['total_quantity_items_in_cart']
-		return HttpResponseRedirect(reverse('home'))
-	return render(request, 'order.html', {})
-
-#Пишу тест отправки письма
-#send_mail('Subject here', 'Here is the message.', 'from@example.com',
-#    ['to@example.com'], fail_silently=False)
-	
 #Переписать с использованием _set c 227 книга по джанго
 #Чистим мусор
 def clean_view(request):
@@ -198,5 +178,91 @@ def clean_view(request):
 		itemcart.delete()
 	return HttpResponseRedirect(reverse('home'))
 
-def return_page(request, template):
-	return render(request, template, {})
+
+'''
+def home_view(request):
+	products = Product.objects.all()
+	brands = Brand.objects.all()
+	context = {
+		'products': products,
+		'brands': brands
+		}
+	return render(request, 'index.html', context)
+
+TODO: Удалить после того как класс будет протестирован
+#Для отображения url в шаблоне
+def product_view(request, product_slug):
+	product = Product.objects.get(slug=product_slug)
+	context = {
+		'product': product
+		}
+	return render(request, 'product.html', context)
+
+#Для отображения url в шаблоне
+def category_view(request, category_slug):
+	category = Category.objects.get(slug=category_slug)
+	brands = category.brands.all()
+	products_of_category = Product.objects.filter(category=category)
+	context = {
+		'category': category,
+		'brands': brands,
+		'products_of_category': products_of_category
+		}
+	return render(request, 'category.html', context)
+
+def brand_view(request, brand_slug):
+	brand = Brand.objects.get(slug=brand_slug)
+	products_of_brand = Product.objects.filter(brand=brand)
+	context = {
+		'brand': brand,
+		'products_of_brand': products_of_brand
+		}
+	return render(request, 'brand.html', context)
+
+TODO: удалить после проверки работоспособности класса
+def make_order_view(request):
+
+	form = OrderForm(request.POST)
+	if form.is_valid():
+		new_order = form.save()
+		cart = get_cart(request)
+		new_order.items.add(cart)
+		new_order.save()
+		
+		values = new_order.get_values_local_fields()		
+		message = 'Данные заказа \n'
+		message += ','.join(map(str, values))
+		message += 'Посмотреть заказ №{} в базе данных можно по ссылке: https://clock.conwert.ru/admin/webshop/order/'.format(new_order.id)
+		send_mail('Поступил Заказ №{}'.format(new_order.id), message,
+				'tiktakclock24@gmail.com', ['tiktakclock24@gmail.com'], fail_silently=False)
+
+		del request.session['cart_id']
+		del request.session['total_quantity_items_in_cart']
+		return HttpResponseRedirect(reverse('home'))
+	return render(request, 'order.html', {})
+
+def make_contact_us_view(request):
+
+	if request.method == 'POST': # If the form has been submitted...
+		contact_form = ContactUsForm(request.POST) # A form bound to the POST data
+		if contact_form.is_valid(): # All validation rules pass
+			subject = "(Обратная связь от клиента) "
+			subject += contact_form.cleaned_data['subject']
+			sender = contact_form.cleaned_data['sender']
+			message = 'Письмо было отправлено от {} \r\n \r\n'.format(sender)
+			message += contact_form.cleaned_data['message']
+			recipient = ['tiktakclock24@gmail.com']
+
+		# и отправим его
+		try:
+			send_mail(subject, message, sender, recipient, fail_silently=False)
+		except:
+			# TODO: дописать сообщение о том, что отправка провалилась
+			pass
+		
+		return HttpResponseRedirect(reverse('home'))
+#		return render_to_response(reverse('home'), {'path_back': path_back}, context_instance=RequestContext(request))
+
+	return HttpResponseRedirect(reverse('home'))
+#	return render_to_response(reverse('home'), context_instance=RequestContext(request))
+'''	
