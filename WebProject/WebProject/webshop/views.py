@@ -93,8 +93,8 @@ class OrderView(View):
 			del request.session['cart_id']
 			del request.session['total_quantity_items_in_cart']
 			return HttpResponseRedirect(reverse('home'))
-        else:
-            pass # дописать возврат формы с ошибками, смотри конспект лекций по формам
+		else:
+			pass # дописать возврат формы с ошибками, смотри конспект лекций по формам
 		return render(request, self.template_name)
 
 class ContactUsView(View):
@@ -164,20 +164,6 @@ def change_item_quantity_and_recount_total_price_view(request):
 		'item_total': cart_item.total_price,
 		'cart_total_price': cart.total_price
 		})
-
-#Переписать с использованием _set c 227 книга по джанго
-#Чистим мусор
-def clean_view(request):
-	for itemcart in CartItem.objects.all():
-		itemcart.associated_with_cart = False
-	for cart in Cart.objects.all():
-		for cartitem in cart.items.all():
-			cartitem.associated_with_cart = True
-			cartitem.save()
-	for itemcart in CartItem.objects.filter(associated_with_cart=False):
-		itemcart.delete()
-	return HttpResponseRedirect(reverse('home'))
-
 
 '''
 def home_view(request):

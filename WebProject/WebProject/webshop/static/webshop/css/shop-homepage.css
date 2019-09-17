@@ -1,9 +1,132 @@
-﻿/*!
+/*!
  * Start Bootstrap - Shop Homepage (https://startbootstrap.com/template-overviews/shop-homepage)
  * Copyright 2013-2019 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-shop-homepage/blob/master/LICENSE)
  */
 
+
+
+/*
+    DEMO STYLE
+*/
+
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+/* ---------------------------------------------------
+    OVERLAY STYLE
+----------------------------------------------------- */
+.overlay {
+    display: none;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+    .overlay.active {
+        display: block;
+        opacity: 1;
+    }
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+#sidebar {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    height: 100vh;
+    z-index: 999;
+    background: #1b1b1b;
+    color: #fff;
+    transition: all 0.3s;
+    overflow-y: scroll;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+    #sidebar.active {
+        left: 0;
+    }
+
+#dismiss {
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    background: #1b1b1b;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+    #dismiss:hover {
+        background: #fff;
+        color: #0D1340;
+    }
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #1b1b1b;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+
+    display: block;
+    color: #fff;
+}
+
+#sidebar ul li a:hover {
+    color: #0D1340;
+    background: #fff;
+}
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+ul ul a {
+
+    padding-left: 30px !important;
+    background: #1b1b1b;
+}
+
+ul.CTAs {
+    padding: 20px;
+}
+
+    ul.CTAs a {
+        text-align: center;
+
+        display: block;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
 
 .main-container {
     margin-top: 10px;
@@ -51,8 +174,7 @@
 .flex {
     display: flex;
     flex-direction: row-reverse;
-    flex-wrap: wrap;
-    
+    flex-wrap: wrap;    
 }
 
     .flex a {
@@ -74,7 +196,7 @@
     color: #0D1340;
 }
 
- /*Стили для статических страниц*/
+ /*STYLES FOR STATIC PAGES*/
 
 .attention {
     font-weight: bold;
@@ -101,31 +223,31 @@ string {
     min-height: calc(100vh - 80px);
 }
 
-/*Шрифты*/
+/*FONTS*/
+
+body{
+    font-family: fantasy, Impact, Arial;
+}
 
 h1 {
-    font-family: fantasy, Impact, Arial;
     font-weight: 400;
     font-style: normal;
     font-size: 40px;
 }
 
 h3 {
-    font-family: fantasy, Impact;
     font-weight: 100;
     font-style: normal;
     font-size: 28px;
 }
 
 h5 {
-    font-family: fantasy, Impact;
     font-weight: 100;
     font-style: normal;
     font-size: 20px;
 }
 
 a {
-    font-family: fantasy, Impact;
     font-weight: 100;
     font-style: normal;
     font-size: 20px;

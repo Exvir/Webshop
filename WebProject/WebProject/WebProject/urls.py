@@ -25,7 +25,7 @@ import webshop.views
 
 urlpatterns = [
     # Examples:
-    
+
 	url(r'^$', webshop.views.HomeView.as_view(), name='home'),
 	url(r'^accounts/', include('registration.backends.default.urls'), name='accounts'),
     url(r'^login/$',
@@ -57,8 +57,6 @@ urlpatterns = [
 	url(r'^payment/$', TemplateView.as_view(template_name="payment.html"), name='payment'),
 	url(r'^delivery/$', TemplateView.as_view(template_name="delivery.html"), name='delivery'),
 	url(r'^contact_us/$', webshop.views.ContactUsView.as_view(), name='contact_us'),
-
-    url(r'^clean/$', webshop.views.clean_view, name='clean'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

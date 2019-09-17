@@ -4,26 +4,6 @@
 <!-- Page Content -->
 <div class="container">
 	<div class="row">
-		<div class="col-lg-3">
-			<div class="text-center object-down-menu" style=''>
-				<h3 class="item">Выбрать часы</h3>
-			</div>
-			<div class="list-group list-of-category">
-            {% for category in categories %}
-              <a class="category-in-list" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
-            {% endfor %}
-			</div>
-			{% for category in categories %}
-			<div class=" list-group text-center title-list">
-				<h3 class="">{{ category.name }}</h3>	
-			</div>
-			<div class="list-group list-of-brand">
-				{% for brand in category.brands.all %}
-					<a class="category-in-list" href="{{ brand.get_absolute_url }}">{{ brand.name }}</a>
-				{% endfor %}
-			</div>
-			{% endfor %}
-		</div>
 		{% for product in products %}
 			{% include 'cardofproduct.html' %}
 		{% endfor %}

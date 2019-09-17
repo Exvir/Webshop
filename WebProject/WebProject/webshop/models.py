@@ -52,6 +52,7 @@ class TypeOfMechanism(models.Model):
 	def __str__(self):
 		return self.name
 
+
 class Product(models.Model):
 	'''Модель продукта'''
 	category = models.ForeignKey(Category)
@@ -74,19 +75,13 @@ class Product(models.Model):
 	#Создание url продукта, используется в шаблоне
 	def get_absolute_url(self):											
 		return reverse('product_detail', kwargs={'product_slug': self.slug})
-
-	
 		
-
-
 class CartItem(models.Model):
 	'''Хранит информацию о количестве и полной стоимости однотипного товара'''
 
 	product = models.ForeignKey(Product)
 	quantity = models.PositiveIntegerField(default=1)
 	total_price = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
-	#Поле необходимо для хранения информации о том ссылается ли хоть одна корзина на экземпляр CartItem
-	associated_with_cart = models.BooleanField(default=False)
 
 	def __str__(self):
 		return "Cart item for product {0}".format(self.product.title)
@@ -150,7 +145,7 @@ class Cart(models.Model):
 
 		cart = self
 		product = Product.objects.get(slug=product_slug)
-		for cart_item in cart.items.all(Order):
+		for cart_item in cart.items.all():
 			if cart_item.product == product:
 				cart.items.remove(cart_item)
 				cart.save()

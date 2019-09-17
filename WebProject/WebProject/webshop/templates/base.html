@@ -4,24 +4,33 @@
 
 	<head>
 
-	  <meta charset="utf-8">
-	  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	  <meta name="description" content="">
-	  <meta name="author" content="">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
 
-	  <title>Интернет магазин</title>
+		<title>Интернет магазин</title>
 
-	  <!-- Bootstrap core CSS -->
-	  <link href="{% static 'webshop/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+		<!-- Bootstrap core CSS -->
+		<link href="{% static 'webshop/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
-	  <!-- Custom styles for this template -->
-	  <link href="{% static 'webshop/css/shop-homepage.css' %}" rel="stylesheet">
+		<!-- Scrollbar Custom CSS -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+		<!-- Font Awesome JS -->
+		<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+		<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+		
+		<!-- Custom styles -->
+		<link href="{% static 'webshop/css/shop-homepage.css' %}" rel="stylesheet">
 
 	</head>
 
 	<body>
+		<div class="overlay"></div>
 		<!-- Header -->
 		<header>
+
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-2 col-md-4">
@@ -38,75 +47,135 @@
 			</div>
 			
 		</header>
-	<!-- Navigation -->
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			<div class="container">
-				<a class="navbar-brand" href="{% url "home" %}">Tik-Tak Clock</a>
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarResponsive">
-					<ul class="navbar-nav mr-auto">
-						<li class="nav-item active dropdown">
-        					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" 
-							   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Каталог</a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-								{% for category in categories %}
-										<a href="{{ category.get_absolute_url }}" class="dropdown-item submenu">{{ category.name }}</a>
-								{% endfor %}
-        					</div>
-      					</li>
-						<li class="nav-item active">
-							<a class="nav-link" href="{% url 'discounts' %}">Акции и скидки
-								<span class="sr-only">(current)</span>
-							</a>
-						</li>
-						<li class="nav-item active">
-							<a class="nav-link" href="{% url 'about' %}">О нас
-								<span class="sr-only">(current)</span>
-							</a>
-						</li>
-						<li class="nav-item active">
-							<a class="nav-link" href="{% url 'payment' %}">Оплата
-								<span class="sr-only">(current)</span>
-							</a>
-						</li>
-						<li class="nav-item active">
-							<a class="nav-link" href="{% url 'delivery' %}">Доставка
-								<span class="sr-only">(current)</span>
-							</a>
-						</li>
-						<li class="nav-item active">
-							<a class="nav-link" href="{% url 'contact_us' %}">Контакты
-								<span class="sr-only">(current)</span>
-							</a>
-						</li>
-					</ul>
-					<ul class="navbar-nav ml-auto navbar-right">
-						<a class="btn btn-light"  href="{% url "cart" %}">Товаров: <span id="quantity_items_in_cart">{{ cart.items.count }}</span> (<span id="total_price_cart">{{ cart.total_price }}</span> руб.)</a>
-					</ul>
+
+		<div class="wrapper">
+
+			<!-- Navigation -->
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+				<div class="container">					
+					<a class="navbar-brand" href="{% url "home" %}">Tik-Tak Clock</a>
+
+					<button type="button" id="sidebarCollapse" class="btn btn-dark" >
+						<i class="fas fa-align-left"></i>
+						<span>Каталог</span>
+					</button>
+
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarResponsive">
+						<ul class="navbar-nav mr-auto">
+							
+							<li class="nav-item active">
+								<a class="nav-link" href="{% url 'discounts' %}">Акции и скидки
+									<span class="sr-only">(current)</span>
+								</a>
+							</li>
+							<li class="nav-item active">
+								<a class="nav-link" href="{% url 'about' %}">О нас
+									<span class="sr-only">(current)</span>
+								</a>
+							</li>
+							<li class="nav-item active">
+								<a class="nav-link" href="{% url 'payment' %}">Оплата
+									<span class="sr-only">(current)</span>
+								</a>
+							</li>
+							<li class="nav-item active">
+								<a class="nav-link" href="{% url 'delivery' %}">Доставка
+									<span class="sr-only">(current)</span>
+								</a>
+							</li>
+							<li class="nav-item active">
+								<a class="nav-link" href="{% url 'contact_us' %}">Контакты
+									<span class="sr-only">(current)</span>
+								</a>
+							</li>
+						</ul>
+						<ul class="navbar-nav ml-auto navbar-right">
+							<a class="btn btn-light"  href="{% url "cart" %}">Товаров: <span id="quantity_items_in_cart">{{ cart.items.count }}</span> (<span id="total_price_cart">{{ cart.total_price }}</span> руб.)</a>
+						</ul>
+					</div>
+				
 				</div>
-			</div>
-		</nav>
-	<main>
-		<div class="container main-container">	
-			{% block content %}{% endblock %}
+			</nav>
+
+			<!--Sidebar-->
+			<nav id="sidebar">
+				<div id="dismiss">
+					<i class="fas fa-arrow-left"></i>
+				</div>
+
+				<div class="sidebar-header">
+					<h3 class="item">Выбрать часы</h3>
+				</div>
+
+				<ul class="list-unstyled components">
+					<li>
+						{% for category in categories %}
+						<a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+						<ul class="list-unstyled" id="pageSubmenu">
+							{% for brand in category.brands.all %}
+							<li>
+								<a class="category-in-list" href="{{ brand.get_absolute_url }}">{{ brand.name }}</a>
+							</li>	
+							{% endfor %}
+						</ul>
+						{% endfor %}
+					</li>
+				</ul>
+			</nav>
+			
+			<!--Content-->
+			<main class="container main-container">
+				{% block content %}{% endblock %}
+			</main>
+
 		</div>
-	</main>
+
 	<!-- Footer -->
 	<footer class="py-5 bg-dark">
 		<div class="container">
 			<p class="m-0 text-center text-white">Copyright &copy; Tik-Tak-Clock.ru {{year}}</p>
 		</div>
 		<!-- /.Footer -->
-	</footer>
+	</footer>	
 
-	<!-- Bootstrap core JavaScript -->
-	<script src="{% static 'webshop/vendor/jquery/jquery.min.js' %}"></script>
-	<script src="{% static 'webshop/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-	<!-- Для приклеивания navbar при прокручивании страницы -->
-	<script>
-		
+    <!-- jQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+
+
+<!--Custom scripts-->
+
+	<!--Custom scrollbar in sidebar-->
+	<script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#dismiss, .overlay').on('click', function () {
+                $('#sidebar').removeClass('active');
+                $('.overlay').removeClass('active');
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').addClass('active');
+                $('.overlay').addClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+	<!-- Fixes navbar when window scrolls down-->
+	<script>		
 		var navBar = document.querySelector('.navbar');
 		var navBarSourceBottom = navBar.getBoundingClientRect().bottom + window.pageYOffset;
 	
@@ -118,6 +187,7 @@
 		  }
 		};
 	</script>
+
 	<script>
 		//Приклеиание/отклевание footer в зависимости от размера окна
 		//Срабатывает при изменении размера экрана и загрузке страницы
