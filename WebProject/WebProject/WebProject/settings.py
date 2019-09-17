@@ -59,8 +59,8 @@ REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
 #Пока не менял
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'tiktakclock24@gmail.com'
-EMAIL_HOST_PASSWORD = 'frfltvbr85'
+EMAIL_HOST_USER = 'mymail@gmail.com'
+EMAIL_HOST_PASSWORD = 'password'
 EMAIL_PORT = 587
 
 #Перенаправление после регистрации
@@ -111,7 +111,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'webproject',
         'USER': 'exvir',
-        'PASSWORD': 'qscft813813',
+        'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '',
     }
