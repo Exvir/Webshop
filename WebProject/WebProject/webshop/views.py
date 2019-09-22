@@ -16,7 +16,7 @@ from webshop.models import Category, Product, CartItem, Cart, Brand, Order
 from webshop.forms import OrderForm, ContactUsForm
 from webshop.functions import get_cart, get_or_create_cart
 
-#Названия переменных переписать, проверяя как они используется в шаблонах
+
 
 class HomeView(ListView):
 
@@ -82,7 +82,7 @@ class OrderView(View):
 			cart = get_cart(request)
 			new_order.items.add(cart)
 			new_order.save()
-		#дописать отправку письма в отдельном методе
+
 			values = new_order.get_values_local_fields()	
 			message = 'Данные заказа \n'
 			message += ','.join(map(str, values))
@@ -93,9 +93,8 @@ class OrderView(View):
 			del request.session['cart_id']
 			del request.session['total_quantity_items_in_cart']
 			return HttpResponseRedirect(reverse('home'))
-		else:
-			pass # дописать возврат формы с ошибками, смотри конспект лекций по формам
-		return render(request, self.template_name)
+		
+		return render(request, self.template_name, {'form': form})
 
 class ContactUsView(View):
 
@@ -106,24 +105,18 @@ class ContactUsView(View):
 		return render(request, self.template_name)
 
 	def post(self, request, *args, **kwargs):
-		contact_form = self.form_class(request.POST) # A form bound to the POST data
-		if contact_form.is_valid(): # All validation rules pass
+		form = self.form_class(request.POST) # A form bound to the POST data
+		if form.is_valid(): # All validation rules pass
 			subject = "(Обратная связь от клиента) "
-			subject += contact_form.cleaned_data['subject']
-			sender = contact_form.cleaned_data['sender']
+			subject += form.cleaned_data['subject']
+			sender = form.cleaned_data['sender']
 			message = 'Письмо было отправлено от {} \r\n \r\n'.format(sender)
-			message += contact_form.cleaned_data['message']
+			message += form.cleaned_data['message']
 			recipient = ['tiktakclock24@gmail.com']
-			try:
-				send_mail(subject, message, sender, recipient, fail_silently=False)
-			except:
-				# TODO: дописать сообщение о том, что отправка провалилась
-				pass
+			send_mail(subject, message, sender, recipient, fail_silently=False)
 			return HttpResponseRedirect(reverse('home'))
-	#		return render_to_response(reverse('home'), {'path_back': path_back}, context_instance=RequestContext(request))
+		return render(request, self.template_name, {'form': form})
 
-		return HttpResponseRedirect(reverse('home'))
-	#	return render_to_response(reverse('home'), context_instance=RequestContext(request))
 
 #Добавление в корзину
 def add_to_cart_view(request):
@@ -164,91 +157,3 @@ def change_item_quantity_and_recount_total_price_view(request):
 		'item_total': cart_item.total_price,
 		'cart_total_price': cart.total_price
 		})
-
-'''
-def home_view(request):
-	products = Product.objects.all()
-	brands = Brand.objects.all()
-	context = {
-		'products': products,
-		'brands': brands
-		}
-	return render(request, 'index.html', context)
-
-TODO: Удалить после того как класс будет протестирован
-#Для отображения url в шаблоне
-def product_view(request, product_slug):
-	product = Product.objects.get(slug=product_slug)
-	context = {
-		'product': product
-		}
-	return render(request, 'product.html', context)
-
-#Для отображения url в шаблоне
-def category_view(request, category_slug):
-	category = Category.objects.get(slug=category_slug)
-	brands = category.brands.all()
-	products_of_category = Product.objects.filter(category=category)
-	context = {
-		'category': category,
-		'brands': brands,
-		'products_of_category': products_of_category
-		}
-	return render(request, 'category.html', context)
-
-def brand_view(request, brand_slug):
-	brand = Brand.objects.get(slug=brand_slug)
-	products_of_brand = Product.objects.filter(brand=brand)
-	context = {
-		'brand': brand,
-		'products_of_brand': products_of_brand
-		}
-	return render(request, 'brand.html', context)
-
-TODO: удалить после проверки работоспособности класса
-def make_order_view(request):
-
-	form = OrderForm(request.POST)
-	if form.is_valid():
-		new_order = form.save()
-		cart = get_cart(request)
-		new_order.items.add(cart)
-		new_order.save()
-		
-		values = new_order.get_values_local_fields()		
-		message = 'Данные заказа \n'
-		message += ','.join(map(str, values))
-		message += 'Посмотреть заказ №{} в базе данных можно по ссылке: https://clock.conwert.ru/admin/webshop/order/'.format(new_order.id)
-		send_mail('Поступил Заказ №{}'.format(new_order.id), message,
-				'tiktakclock24@gmail.com', ['tiktakclock24@gmail.com'], fail_silently=False)
-
-		del request.session['cart_id']
-		del request.session['total_quantity_items_in_cart']
-		return HttpResponseRedirect(reverse('home'))
-	return render(request, 'order.html', {})
-
-def make_contact_us_view(request):
-
-	if request.method == 'POST': # If the form has been submitted...
-		contact_form = ContactUsForm(request.POST) # A form bound to the POST data
-		if contact_form.is_valid(): # All validation rules pass
-			subject = "(Обратная связь от клиента) "
-			subject += contact_form.cleaned_data['subject']
-			sender = contact_form.cleaned_data['sender']
-			message = 'Письмо было отправлено от {} \r\n \r\n'.format(sender)
-			message += contact_form.cleaned_data['message']
-			recipient = ['tiktakclock24@gmail.com']
-
-		# и отправим его
-		try:
-			send_mail(subject, message, sender, recipient, fail_silently=False)
-		except:
-			# TODO: дописать сообщение о том, что отправка провалилась
-			pass
-		
-		return HttpResponseRedirect(reverse('home'))
-#		return render_to_response(reverse('home'), {'path_back': path_back}, context_instance=RequestContext(request))
-
-	return HttpResponseRedirect(reverse('home'))
-#	return render_to_response(reverse('home'), context_instance=RequestContext(request))
-'''	
