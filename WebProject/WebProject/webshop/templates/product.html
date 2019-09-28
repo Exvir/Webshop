@@ -85,37 +85,3 @@
 	});
 </script>
 {% endblock content %}
-
-
-	<!-- 
-	<div class="col-sm-6">
-		
-		<div class="flex-container">
-			<img class="image main-image" src="{{ product.main_image.url }}"/>
-			<img class="image additional-image" src="{{ product.first_additional_image.url }}"/>
-			<img class="image additional-image" src="{{ product.second_additional_image.url }}"/>
-			<img class="image additional-image" src="{{ product.third_additional_image.url }}"/>
-		</div>
-	</div>
-		
-	<div class="col-sm-6">
-
-		<h3 class="text-center">{{ product.title }}</h3>
-		<hr />
-		<p>{{ product.description }}</p>
-		<p><strong>Цена: {{ product.price }}</strong></p>
-		{% if request.user.is_authenticated %}
-		<p class="text-right">
-			Количество:
-			<input type="number" name="quantity" class="cart-item-quantity" value="1" min="1" style="width: 50px;"/>
-			<a href="#" class="add_to_cart" data-slug="{{ product.slug }}">		
-				<button class="btn btn-danger">Добавить в корзину</button>
-			</a>
-		</p>
-		{% else %}
-		<small class="text-center">Заказывать товар могут только авторизированные пользователи. 
-		Пожалуйста <a href="{% url "login" %}">войдите</a> или <a href="{% url "registration_register" %}">зарегистрируйтесь.</a></small>					
-		{% endif %}
-		
-</div>
-		-->
