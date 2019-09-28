@@ -73,7 +73,8 @@ class OrderView(View):
 	template_name = 'order.html'
 	
 	def get(self, request, *args, **kwargs):
-		return render(request, self.template_name)
+		form = self.form_class()
+		return render(request, self.template_name, {'form': form})
 
 	def post(self, request, *args, **kwargs):
 		form = self.form_class(request.POST)
@@ -102,7 +103,8 @@ class ContactUsView(View):
 	template_name = 'contact_us.html'
 	
 	def get(self, request, *args, **kwargs):
-		return render(request, self.template_name)
+		form = self.form_class()
+		return render(request, self.template_name, {'form': form})
 
 	def post(self, request, *args, **kwargs):
 		form = self.form_class(request.POST) # A form bound to the POST data

@@ -9,18 +9,18 @@
 <form method="post" action="{% url 'contact_us' %}">
 	{% csrf_token %}
 	<div class="row">
+			<div class="col-sm-4">
+				{{ form.sender|as_crispy_field }}
+			</div>
+		</div>
+	<div class="row">
 		<div class="col-sm-4">
-			<input name="subject" placeholder="Тема письма" type="text" class="text" />
+			{{ form.subject|as_crispy_field }}
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-sm-4">
-			<input name="sender" placeholder="Ваш email для ответа" type="text" class="text" />
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm-4">
-			<textarea name="message" placeholder="Текст письма"></textarea>
+			{{ form.message|as_crispy_field }}
 		</div>
 	</div>
 	<div class="row">

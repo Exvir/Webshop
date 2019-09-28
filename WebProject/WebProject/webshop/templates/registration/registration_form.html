@@ -5,11 +5,23 @@
 
 {% block content %}
 <h1 class="text-center">Регистрация</h1>
+<br>
 <form method="post" action="">
     {% csrf_token %}
     <div class="row">
-        <div class="col-sm-12">
-            {{ form|crispy }}
+        <div class="col-sm-6">
+            {{ form.username|as_crispy_field }}
+        </div>
+        <div class="col-sm-6">
+            {{ form.email|as_crispy_field }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            {{ form.password1|as_crispy_field }}
+        </div>
+        <div class="col-sm-6">
+            {{ form.password2|as_crispy_field }}
         </div>
     </div>      
     <input class="btn btn-dark" type="submit" value="{% trans 'Submit' %}" />

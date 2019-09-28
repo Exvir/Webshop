@@ -29,25 +29,25 @@ class OrderForm(ModelForm):
 	class Meta:
 		model = Order
 		fields = ['first_name', 'last_name', 'patronymic', 'email', 'phone', 'postcode', 'city', 'address', 'comments']
+		labels = {
+            "first_name": "Имя",
+            "last_name": "Фамилия",
+			"patronymic": "Отчество",
+			"phone": "Контактный телефон",
+			"postcode": "Почтовый индекс",
+			"city": "Город",
+			"address": "Адресс доставки",
+			"comments": "Комментарии к заказу"
+        }
+		widgets = {
+                'comments': forms.Textarea(),
+                }
+		help_texts = {
+            'phone': 'Пожалуйста, указывайте реальный номер телефона, по которому с Вами можно связаться!',
+        }
 
-
-# Старая форма записи
-'''
-class OrderForm(forms.Form):
-
-	name = forms.CharField(label="Имя")
-	last_name  = forms.CharField(label='Фамилия')
-	patronymic = forms.CharField(label='Отчество')
-	email = forms.EmailField()
-	phone = forms.CharField(label = 'Контактный телефон', 
-						 help_text = 'Пожалуйста, указывайте реальный номер телефона, по которому с Вами можно связаться!')
-	postcode = forms.IntegerField(label = 'Почтовый индекс')
-	city = forms.CharField(label='Город')
-	address = forms.CharField(label = 'Адресс доставки', required=False)
-	comments = forms.CharField(label = 'Комментарии к заказу', widget=forms.Textarea, required=False)
-'''
 class ContactUsForm(forms.Form):
 
-	subject = forms.CharField(label="subject")
-	message  = forms.CharField(label='message')
-	sender = forms.EmailField(label='sender')
+	subject = forms.CharField(label="Тема")
+	message  = forms.CharField(label='Сообщение', widget=forms.Textarea())
+	sender = forms.EmailField(label='Ваш E-mail')
