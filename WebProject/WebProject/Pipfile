@@ -15,6 +15,7 @@ django-debug-toolbar = "*"
 django-environment = "*"
 django-crispy-forms = "*"
 gunicorn = "*"
+django-environ = "*"
 
 [requires]
 python_version = "3.6"
