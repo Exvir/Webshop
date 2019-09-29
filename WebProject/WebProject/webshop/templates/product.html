@@ -12,9 +12,15 @@
 		</div>
 		<div class="col-xl-2">
 			<figure class="text-center">
-				<img class="image additional-image" src="{{ product.first_additional_image.url }}"/>
-				<img class="image additional-image" src="{{ product.second_additional_image.url }}"/>
-				<img class="image additional-image" src="{{ product.third_additional_image.url }}"/>
+				{% if product.first_additional_image %}
+					<img class="image additional-image" src="{{ product.first_additional_image.url }}"/>
+				{% endif %}
+				{% if product.second_additional_image %}
+					<img class="image additional-image" src="{{ product.second_additional_image.url }}"/>
+				{% endif %}
+				{% if product.third_additional_image %}
+					<img class="image additional-image" src="{{ product.third_additional_image.url }}"/>
+				{% endif %}
 			</figure>
 		</div>	
 		<div class="col-xl-6">
