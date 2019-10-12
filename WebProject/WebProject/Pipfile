@@ -18,6 +18,7 @@ django-crispy-forms = "*"
 gunicorn = "*"
 django-environ = "*"
 fixtures = "*"
+pylint-django = "*"
 
 [requires]
 python_version = "3.6"
