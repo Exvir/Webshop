@@ -1,27 +1,14 @@
 from datetime import datetime
 
 import django.contrib.auth.views
-from django.conf.urls import url
-
-#Импорт библиотек для медиа файлов
-from django.conf import settings
-from django.conf.urls.static import static
+from django.conf.urls import url, include
 from django.views.generic import TemplateView
 
-# Uncomment the next lines to enable the admin:
-from django.conf.urls import include
-from django.contrib import admin
-admin.autodiscover()
-
-from registration.forms import RegistrationFormTermsOfService
-
-from WebProject.settings import DEBUG
 import webshop.forms
 import webshop.views
 
 urlpatterns = [
     # Examples:
-
     url(r'^$', webshop.views.HomeView.as_view(), name='home'),
     url(r'^accounts/', include('registration.backends.default.urls'), name='accounts'),
     url(r'^logout$', django.contrib.auth.views.logout, {'next_page': '/',}, name='logout'),

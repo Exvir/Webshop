@@ -18,7 +18,7 @@ from django.contrib import admin
 from WebProject.settings import DEBUG
 
 urlpatterns = [
-    # Examples:
+    # Urls of apps:
     url(r'^', include('webshop.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
