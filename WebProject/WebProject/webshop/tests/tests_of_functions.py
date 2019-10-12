@@ -34,7 +34,5 @@ class GetOrCreateCartTest(TestCase):
 	def test_get_or_create_cart(self):
 		cart, created = webshop.functions.get_or_create_cart(self.request)
 		self.assertTrue(created)
-		self.request.session['cart_id'] = 1
-		Cart.objects.create(id=1)
 		cart, created = webshop.functions.get_or_create_cart(self.request)
 		self.assertFalse(created)
