@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pylint = "*"
 
 [packages]
 Django = "==1.11"
@@ -16,6 +17,7 @@ django-environment = "*"
 django-crispy-forms = "*"
 gunicorn = "*"
 django-environ = "*"
+fixtures = "*"
 
 [requires]
 python_version = "3.6"

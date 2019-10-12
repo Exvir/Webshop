@@ -11,6 +11,8 @@ from django.template import RequestContext
 from django.contrib.auth import authenticate
 from django.contrib.auth.views import login
 from django.views.generic import View, ListView
+from django.views.generic.edit import FormView
+from django.urls import reverse, reverse_lazy
 
 from webshop.models import Category, Product, CartItem, Cart, Brand, Order
 from webshop.forms import OrderForm, ContactUsForm
@@ -67,57 +69,45 @@ class BrandView(ListView):
 		context['products_of_brand'] = Product.objects.filter(brand=self.brand)
 		return context	
 
-class OrderView(View):
+class OrderView(FormView):
 
+	success_url = reverse_lazy('home')
 	form_class = OrderForm
-	template_name = 'order.html'
-	
-	def get(self, request, *args, **kwargs):
-		form = self.form_class()
-		return render(request, self.template_name, {'form': form})
+	template_name = 'order.html'	
 
-	def post(self, request, *args, **kwargs):
-		form = self.form_class(request.POST)
-		if form.is_valid():
-			new_order = form.save()
-			cart = get_cart(request)
-			new_order.items.add(cart)
-			new_order.save()
+	def form_valid(self, form):
+		new_order = form.save()
+		cart = get_cart(self.request)
+		new_order.items.add(cart)
+		new_order.save()
 
-			values = new_order.get_values_local_fields()	
-			message = 'Данные заказа \n'
-			message += ','.join(map(str, values))
-			message += 'Посмотреть заказ №{} в базе данных можно по ссылке: https://clock.conwert.ru/admin/webshop/order/'.format(new_order.id)
-			send_mail('Поступил Заказ №{}'.format(new_order.id), message,
-					'tiktakclock24@gmail.com', ['tiktakclock24@gmail.com'], fail_silently=False)
+		values = new_order.get_values_local_fields()	
+		message = 'Данные заказа \n'
+		message += ','.join(map(str, values))
+		message += f'Посмотреть заказ №{new_order.id} в базе данных можно по ссылке: https://clock.conwert.ru/admin/webshop/order/'
+		send_mail(f'Поступил Заказ №{new_order.id}', message,
+				'tiktakclock24@gmail.com', ['tiktakclock24@gmail.com'], fail_silently=False)
 
-			del request.session['cart_id']
-			del request.session['total_quantity_items_in_cart']
-			return HttpResponseRedirect(reverse('home'))
+		del self.request.session['cart_id']
+		del self.request.session['total_quantity_items_in_cart']
 		
-		return render(request, self.template_name, {'form': form})
+		return super(OrderView, self).form_valid(form)
 
 class ContactUsView(View):
 
+	success_url = reverse_lazy('home')
 	form_class = ContactUsForm
-	template_name = 'contact_us.html'
-	
-	def get(self, request, *args, **kwargs):
-		form = self.form_class()
-		return render(request, self.template_name, {'form': form})
+	template_name = 'contact_us.html'	
 
-	def post(self, request, *args, **kwargs):
-		form = self.form_class(request.POST) # A form bound to the POST data
-		if form.is_valid(): # All validation rules pass
-			subject = "(Обратная связь от клиента) "
-			subject += form.cleaned_data['subject']
-			sender = form.cleaned_data['sender']
-			message = 'Письмо было отправлено от {} \r\n \r\n'.format(sender)
-			message += form.cleaned_data['message']
-			recipient = ['tiktakclock24@gmail.com']
-			send_mail(subject, message, sender, recipient, fail_silently=False)
-			return HttpResponseRedirect(reverse('home'))
-		return render(request, self.template_name, {'form': form})
+	def form_valid(self, form):
+		subject = "(Обратная связь от клиента) "
+		subject += form.cleaned_data['subject']
+		sender = form.cleaned_data['sender']
+		message = 'Письмо было отправлено от {} \r\n \r\n'.format(sender)
+		message += form.cleaned_data['message']
+		recipient = ['tiktakclock24@gmail.com']
+		send_mail(subject, message, sender, recipient, fail_silently=False)
+		return super(ContactUsView, self).form_valid(form)
 
 
 #Добавление в корзину
