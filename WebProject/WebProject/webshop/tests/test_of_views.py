@@ -45,7 +45,7 @@ class CategoryViewTest(TestCase):
         response = self.client.get('/category/watchs-of-man/')
         self.assertIsNotNone(response.context)        
         self.assertEqual(response.context.get('category'), self.category)
-        #QuerySet нельзя сравнивать, по этому ограничиваюсь сравнением первого элемента, возможно следует перебрать в цикле for
+        #QuerySet нельзя сравнивать, по этому ограничиваюсь сравнением первого элемента
         self.assertEqual(response.context.get('brands').first(), self.category.brands.all().first())
         self.assertEqual(response.context.get('products_of_category').first(), Product.objects.filter(category=self.category).first())
 
