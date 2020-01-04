@@ -103,7 +103,7 @@ class ContactUsView(View):
 		subject = "(Обратная связь от клиента) "
 		subject += form.cleaned_data['subject']
 		sender = form.cleaned_data['sender']
-		message = 'Письмо было отправлено от {} \r\n \r\n'.format(sender)
+		message = f'Письмо было отправлено от {sender} \r\n \r\n'
 		message += form.cleaned_data['message']
 		recipient = ['tiktakclock24@gmail.com']
 		send_mail(subject, message, sender, recipient, fail_silently=False)

@@ -10,6 +10,11 @@ import webshop.views
 urlpatterns = [
     # Examples:
     url(r'^$', webshop.views.HomeView.as_view(), name='home'),
+    url(r'^test1/$', TemplateView.as_view(template_name='1.html'), name='1'),
+    url(r'^test2/$', TemplateView.as_view(template_name='2.html'), name='2'),
+    url(r'^test3/$', TemplateView.as_view(template_name='3.html'), name='3'),
+    url(r'^test4/$', TemplateView.as_view(template_name='4.html'), name='4'),
+    url(r'^test5/$', TemplateView.as_view(template_name='5.html'), name='5'),
     url(r'^accounts/', include('registration.backends.default.urls'), name='accounts'),
     url(r'^logout$', django.contrib.auth.views.logout, {'next_page': '/',}, name='logout'),
     url(r'^product/(?P<product_slug>[-\w]+)/$', webshop.views.ProductView.as_view(), name='product_detail'),
